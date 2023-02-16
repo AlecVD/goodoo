@@ -1,12 +1,20 @@
-[gd_scene load_steps=7 format=3 uid="uid://db8737y1ogc6i"]
+[gd_scene load_steps=10 format=3 uid="uid://bcvjd0p268loe"]
 
 [ext_resource type="Script" path="res://scenes/main/main.gd" id="1_rpb6r"]
-[ext_resource type="Material" uid="uid://yaynr845kreg" path="res://assets/prototyping/prototype_wall.tres" id="1_viqy5"]
+[ext_resource type="Texture2D" uid="uid://bekqkonyhbtfj" path="res://assets/prototyping/default.png" id="2_0gxxs"]
 [ext_resource type="PackedScene" uid="uid://h5n4mr2lsyf8" path="res://scenes/player/player.tscn" id="2_s1gii"]
+[ext_resource type="Material" uid="uid://yaynr845kreg" path="res://assets/prototyping/prototype_light.tres" id="3_hcevr"]
+[ext_resource type="Material" uid="uid://bo2tq65ltf4w8" path="res://assets/prototyping/prototype_dark.tres" id="5_tvpid"]
 
 [sub_resource type="Environment" id="Environment_vrxqa"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_8pv0g"]
+lightmap_size_hint = Vector2i(14, 21)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v14ro"]
+albedo_texture = ExtResource("2_0gxxs")
+uv1_offset = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+uv1_triplanar = true
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_2nwrm"]
 data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
@@ -23,20 +31,20 @@ environment = SubResource("Environment_vrxqa")
 transform = Transform3D(0.766044, -0.604023, 0.219846, 0, 0.34202, 0.939693, -0.642788, -0.719846, 0.262003, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Floor" type="MeshInstance3D" parent="."]
-transform = Transform3D(10, 0, 0, 0, 0.5, 0, 0, 0, 10, 0, -0.25, 0)
+[node name="Box" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.707336, 0)
 mesh = SubResource("BoxMesh_8pv0g")
-surface_material_override/0 = ExtResource("1_viqy5")
+surface_material_override/0 = SubResource("StandardMaterial3D_v14ro")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Box"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Box/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_2nwrm")
 
 [node name="Wall" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 10, 4.70625, 0.527285, 0)
+transform = Transform3D(0.5, 0, 0, 0, 4, 0, 0, 0, 10, 9.12503, 2, 0)
 mesh = SubResource("BoxMesh_8pv0g")
-surface_material_override/0 = ExtResource("1_viqy5")
+surface_material_override/0 = ExtResource("3_hcevr")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Wall"]
 
@@ -45,3 +53,11 @@ shape = SubResource("ConcavePolygonShape3D_2nwrm")
 
 [node name="Player" parent="." instance=ExtResource("2_s1gii")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.82706, 0)
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+material_override = ExtResource("5_tvpid")
+snap = 0.0101
+use_collision = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
+size = Vector3(50, 0.2, 50)
