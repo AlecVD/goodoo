@@ -1,22 +1,47 @@
-[gd_scene load_steps=4 format=3 uid="uid://db8737y1ogc6i"]
+[gd_scene load_steps=7 format=3 uid="uid://db8737y1ogc6i"]
 
+[ext_resource type="Script" path="res://scenes/main/main.gd" id="1_rpb6r"]
 [ext_resource type="Material" uid="uid://yaynr845kreg" path="res://assets/prototyping/prototype_wall.tres" id="1_viqy5"]
+[ext_resource type="PackedScene" uid="uid://h5n4mr2lsyf8" path="res://scenes/player/player.tscn" id="2_s1gii"]
+
+[sub_resource type="Environment" id="Environment_vrxqa"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_8pv0g"]
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_2mswe"]
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_2nwrm"]
 data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
 
 [node name="Main" type="Node3D"]
+script = ExtResource("1_rpb6r")
 
 [node name="Lighting" type="Node" parent="."]
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
+environment = SubResource("Environment_vrxqa")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(0.766044, -0.604023, 0.219846, 0, 0.34202, 0.939693, -0.642788, -0.719846, 0.262003, 0, 0, 0)
+shadow_enabled = true
+
 [node name="Floor" type="MeshInstance3D" parent="."]
-transform = Transform3D(10, 0, 0, 0, 0.5, 0, 0, 0, 10, 0, 0, 0)
+transform = Transform3D(10, 0, 0, 0, 0.5, 0, 0, 0, 10, 0, -0.25, 0)
 mesh = SubResource("BoxMesh_8pv0g")
 surface_material_override/0 = ExtResource("1_viqy5")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_2mswe")
+shape = SubResource("ConcavePolygonShape3D_2nwrm")
+
+[node name="Wall" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 10, 4.70625, 0.527285, 0)
+mesh = SubResource("BoxMesh_8pv0g")
+surface_material_override/0 = ExtResource("1_viqy5")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Wall"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_2nwrm")
+
+[node name="Player" parent="." instance=ExtResource("2_s1gii")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.82706, 0)
