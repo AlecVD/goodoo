@@ -7,6 +7,9 @@
 [ext_resource type="Material" uid="uid://bo2tq65ltf4w8" path="res://assets/prototyping/prototype_dark.tres" id="5_tvpid"]
 
 [sub_resource type="Environment" id="Environment_vrxqa"]
+tonemap_mode = 3
+ssil_enabled = true
+sdfgi_enabled = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_8pv0g"]
 lightmap_size_hint = Vector2i(14, 21)
