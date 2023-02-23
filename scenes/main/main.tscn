@@ -1,15 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://bcvjd0p268loe"]
+[gd_scene load_steps=13 format=3 uid="uid://bcvjd0p268loe"]
 
 [ext_resource type="Script" path="res://scenes/main/main.gd" id="1_rpb6r"]
 [ext_resource type="Texture2D" uid="uid://bekqkonyhbtfj" path="res://assets/prototyping/default.png" id="2_0gxxs"]
 [ext_resource type="PackedScene" uid="uid://h5n4mr2lsyf8" path="res://scenes/player/player.tscn" id="2_s1gii"]
+[ext_resource type="PackedScene" uid="uid://bcxi5u8nwf7dv" path="res://scenes/LightingDefault.tscn" id="2_v8okf"]
 [ext_resource type="Material" uid="uid://yaynr845kreg" path="res://assets/prototyping/prototype_light.tres" id="3_hcevr"]
 [ext_resource type="Material" uid="uid://bo2tq65ltf4w8" path="res://assets/prototyping/prototype_dark.tres" id="5_tvpid"]
-
-[sub_resource type="Environment" id="Environment_vrxqa"]
-tonemap_mode = 3
-ssil_enabled = true
-sdfgi_enabled = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_8pv0g"]
 lightmap_size_hint = Vector2i(14, 21)
@@ -22,20 +18,21 @@ uv1_triplanar = true
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_2nwrm"]
 data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_oxr5b"]
+size = Vector3(100, 10, 100)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_jimdg"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_tk8it"]
+height = 1.0
+
 [node name="Main" type="Node3D"]
 script = ExtResource("1_rpb6r")
 
-[node name="Lighting" type="Node" parent="."]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
-environment = SubResource("Environment_vrxqa")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting"]
-transform = Transform3D(0.766044, -0.604023, 0.219846, 0, 0.34202, 0.939693, -0.642788, -0.719846, 0.262003, 0, 0, 0)
-shadow_enabled = true
+[node name="Lighting" parent="." instance=ExtResource("2_v8okf")]
 
 [node name="Box" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.707336, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.503, 0)
 mesh = SubResource("BoxMesh_8pv0g")
 surface_material_override/0 = SubResource("StandardMaterial3D_v14ro")
 
@@ -55,7 +52,7 @@ surface_material_override/0 = ExtResource("3_hcevr")
 shape = SubResource("ConcavePolygonShape3D_2nwrm")
 
 [node name="Player" parent="." instance=ExtResource("2_s1gii")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.82706, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15576, 0)
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
 material_override = ExtResource("5_tvpid")
@@ -63,4 +60,58 @@ snap = 0.0101
 use_collision = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 size = Vector3(50, 0.2, 50)
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_oxr5b")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.704263, 2.28763, -4.77437)
+mass = 0.1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("SphereShape3D_jimdg")
+
+[node name="Ball" type="MeshInstance3D" parent="RigidBody3D"]
+mesh = SubResource("CapsuleMesh_tk8it")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("5_tvpid")
+
+[node name="RigidBody3D2" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.864311, 6.53934, -4.77437)
+mass = 0.1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D2"]
+shape = SubResource("SphereShape3D_jimdg")
+
+[node name="Ball" type="MeshInstance3D" parent="RigidBody3D2"]
+mesh = SubResource("CapsuleMesh_tk8it")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("5_tvpid")
+
+[node name="RigidBody3D3" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.704263, 11.6122, -4.77437)
+mass = 0.1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D3"]
+shape = SubResource("SphereShape3D_jimdg")
+
+[node name="Ball" type="MeshInstance3D" parent="RigidBody3D3"]
+mesh = SubResource("CapsuleMesh_tk8it")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("5_tvpid")
+
+[node name="RigidBody3D4" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.704263, 13.4022, -4.77437)
+mass = 0.1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D4"]
+shape = SubResource("SphereShape3D_jimdg")
+
+[node name="Ball" type="MeshInstance3D" parent="RigidBody3D4"]
+mesh = SubResource("CapsuleMesh_tk8it")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("5_tvpid")
